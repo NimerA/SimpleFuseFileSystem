@@ -4,12 +4,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define SECTOR_SIZE 4096
+#define SECTOR_SIZE            4096
+#define DEVICE_SIZE_B          1048576
 
-int device_open(const char *path);
-void device_close();
-int device_read_sector(unsigned char buffer[], int sector);
-int device_write_sector(unsigned char buffer[], int sector);
-void device_flush();
+int device_open (const char *path);
+void device_close ();
+int device_read_sector (unsigned char buffer[], int sector);
+int device_write_sector (unsigned char buffer[], int sector);
+void device_flush ();
 
 #endif

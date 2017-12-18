@@ -34,6 +34,7 @@ static struct fuse_operations operations = {
 	.rmdir      = do_rmdir,
 };
 
+
 int main( int argc, char *argv[] ){
 	const char *path = "./drive";
 	printf("Mounting file system...\n");
@@ -41,6 +42,14 @@ int main( int argc, char *argv[] ){
 	    printf("Cannot open device file: %s\n", path);
 	    return 1;
 	}	
+
+	printf("MAX_SECTORS: %u\n", MAX_SECTORS);
+	printf("MAX_BITMAP_ENTRIES: %u\n", MAX_BITMAP_BYTE);
+	printf("BITMAP_SECTOR_SIZE: %u\n", BITMAP_SECTOR_SIZE);
+	printf("MAX_DIRECTORY_ENTRIES: %u\n", MAX_DIRECTORY_ENTRIES);
+
+	printf("DIREC: %u\n", DIRECTORY_SECTOR);
+
 	return fuse_main( argc, argv, &operations, NULL );
 }
 

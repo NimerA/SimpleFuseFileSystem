@@ -14,17 +14,55 @@
 #include <fcntl.h>
 #include <libgen.h>
 #include <limits.h>
+#include <math.h>
 
 #include "device.h"
-#include "bitmap.h"
-#include "directory.h"
+ 
+#define DIRECTORY_ENTRY_SIZE  128
+#define CHAR_SIZE             sizeof(char)
+#define INT_SIZE              sizeof(int)
+#define MAX_NAME_SIZE         (DIRECTORY_ENTRY_SIZE - CHAR_SIZE - INT_SIZE)
 
-#define DRIVE_SIZE_B          1073741824
-#define BITMAP_MAX_ENTRIES    4096
-#define DIRECTORY_MAX_ENTRIES 32
+#define MAX_SECTORS           (DEVICE_SIZE_B / SECTOR_SIZE )
+#define MAX_BITMAP_BYTE       ((MAX_SECTORS % 8 == 0) ? (MAX_SECTORS/8) : ((MAX_SECTORS/8) + 1))
+#define BITMAP_SECTOR_SIZE    ((MAX_BITMAP_BYTE % SECTOR_SIZE == 0) ? (MAX_BITMAP_BYTE/SECTOR_SIZE) : ((MAX_BITMAP_BYTE/SECTOR_SIZE) + 1))
+#define MAX_DIRECTORY_ENTRIES (SECTOR_SIZE / DIRECTORY_ENTRY_SIZE)
+#define REAL_BITMAP_SIZE      (BITMAP_SECTOR_SIZE * SECTOR_SIZE)
 
-unsigned char bitmap[BITMAP_MAX_ENTRIES];
-unsigned char direcotry[DIRECTORY_MAX_ENTRIES];
+#define SUPERBLOCK_SECTOR     1
+#define BITMAP_SECTOR         2
+#define DIRECTORY_SECTOR      (BITMAP_SECTOR + BITMAP_SECTOR_SIZE)
+
+struct Directory_entry {
+    unsigned char name [MAX_NAME_SIZE];
+    unsigned char type;
+    unsigned int  block;
+};
+
+struct File {
+    unsigned char name [MAX_NAME_SIZE];
+    unsigned int  head;
+    unsigned char size;
+    unsigned int  block;
+};
+
+unsigned int sectorsFree;
+unsigned char bitmap[REAL_BITMAP_SIZE];
+unsigned char direcotry[MAX_DIRECTORY_ENTRIES];
+
+// ======== AUXILIARY FUNCTIONS ========
+
+void format ();
+
+void write_bitmap();
+void load_bitmap ();
+
+void write_directory();
+void load_directory ();
+
+void setBit (int numberBit, int value);
+int  getBit (int numberBit);
+void printBitmap ();
 
 // ======== DRIVE API FUNCTIONS ========
 
