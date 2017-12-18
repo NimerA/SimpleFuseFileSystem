@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define SECTOR_SIZE		        512
+#define SECTOR_SIZE 4096
 
 int device_open(const char *path);
 void device_close();

@@ -29,6 +29,9 @@ static struct fuse_operations operations = {
 	.mkdir      = do_mkdir,
 	.access     = do_access,
 	.readlink   = do_readlink,
+	.mknod      = do_mknod,
+	.unlink     = do_unlink,
+	.rmdir      = do_rmdir,
 };
 
 int main( int argc, char *argv[] ){
@@ -40,3 +43,4 @@ int main( int argc, char *argv[] ){
 	}	
 	return fuse_main( argc, argv, &operations, NULL );
 }
+
